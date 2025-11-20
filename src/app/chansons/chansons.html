@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <table class="table table-striped">
+                <tr>
+                    <th>N°</th>
+                    <th>Id</th>
+                    <th>Titre</th>
+                    <th>Artiste</th>
+                    <th>Durée</th>
+                    <th>Date de sortie</th>
+                    <th>Genre</th>
+                </tr>
+                @for (chanson of chansons; track chanson.idChanson ;let index =$index ; let nbr = $count ; let first =
+                $first; let last = $last) {
+               <!-- @if(last) {
+                <h1>Nombre de chansons : {{ nbr }}</h1>
+                } -->
+                <tbody>
+                    <tr>
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ chanson.idChanson }}</td>
+                        <td>{{ chanson.titre }}</td>
+                        <td>{{ chanson.artiste }}</td>
+                        <td>{{ chanson.duree }} min</td>
+                        <td>{{ chanson.dateSortie | date:'dd/MM/yyyy' }}</td>
+                        <td>{{chanson.Genre.nomGen}}</td>
+                        @if(auth.isAdmin()) {
+                            <td>
+                                <a class="btn btn-danger" (click)="supprimerChanson(chanson)">Supprimer</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-success"
+                                    [routerLink]="['/update-chanson', chanson.idChanson]">Modifier</a>
+                            </td>
+                        }
+                    </tr>
+                </tbody>
+
+                }
+
+                @empty {
+                <h1>Aucune chanson trouvée !</h1>
+                }
+            </table>
+        </div>
+    </div>
+</div>
