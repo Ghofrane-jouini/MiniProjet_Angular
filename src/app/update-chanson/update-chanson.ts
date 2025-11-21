@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import type { Chanson } from '../model/chanson.model';
 import { ChansonService } from '../services/chanson.service';
 import { Genre } from '../model/Genre.model';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-update-chanson',

@@ -8,6 +8,9 @@ import { Observable, of } from 'rxjs';
 })
 
 export class ChansonService {
+  updateGenre(g: Genre) {
+    throw new Error('Method not implemented.');
+  }
   chansons: Chanson[];
   chanson!: Chanson;
   Genres: Genre[];
@@ -132,6 +135,11 @@ export class ChansonService {
   ajouterChanson(chanson: Chanson) {
     this.chansons.push(chanson);
   }
+  ajouterGenre(Gen: Genre): Genre[] {
+  this.Genres.push(Gen);
+  return this.Genres;
+}
+
 
   supprimerChanson(chanson: Chanson) {
     const index = this.chansons.indexOf(chanson, 0);

@@ -5,6 +5,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SearchFilterPipe } from '../search-filter-pipe';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-recherche-par-nom',
@@ -19,7 +20,7 @@ export class RechercheParNom implements OnInit{
   allchansons!: Chanson[];
   searchTerm: string='';
 
-  constructor(private chansonService: ChansonService) { }
+  constructor(private chansonService: ChansonService ,public auth: AuthService) { }
   ngOnInit(): void {
     this.chansons = this.chansonService.listeChansons();
     this.allchansons = this.chansonService.listeChansons();

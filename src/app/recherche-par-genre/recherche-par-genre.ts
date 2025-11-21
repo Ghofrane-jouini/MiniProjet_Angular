@@ -5,6 +5,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Genre } from '../model/Genre.model';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-recherche-par-genre',
@@ -17,7 +18,7 @@ export class RechercheParGenre implements OnInit {
   chansons!: Chanson[];
   idGenre!: number;
 
-  constructor(private chansonService: ChansonService) { }
+  constructor(private chansonService: ChansonService ,public auth: AuthService) { }
   ngOnInit(): void {
     this.Genres=this.chansonService.listeGenres();
     this.chansons = this.chansonService.listeChansons();

@@ -2,7 +2,7 @@
     <form class="form-inline">
         <div class="form-group mx-sm-3 mb-2 mt-2 ">
             <label>Nom Chanson en tapant</label>
-            <input #nom [(ngModel)]="searchTerm" name="searchTerm" class="form-control" >
+            <input #nom [(ngModel)]="searchTerm" name="searchTerm" class="form-control">
         </div>
     </form>
     <!--<form class="form-inline">
@@ -12,7 +12,7 @@
         </div>
     </form>-->
 
-   <!-- <form class="form-inline">
+    <!-- <form class="form-inline">
         <div class="form-group mx-sm-3 mb-2 mt-2">
             <label>Nom Chanson</label>
             <input type="text" class="form-control" [(ngModel)]="titre" name="titre" />
@@ -51,13 +51,14 @@
                         @else {
                         <td>PAS DE GENRE</td>
                         }
+                        @if(auth.isAdmin()) {
                         <td>
                             <a class="btn btn-danger" (click)="supprimerChanson(chanson)">Supprimer</a>
                         </td>
                         <td>
                             <a class="btn btn-success"
                                 [routerLink]="['/update-chanson', chanson.idChanson]">Modifier</a>
-                        </td>
+                        </td>}
                     </tr>
                 </tbody>
                 }
