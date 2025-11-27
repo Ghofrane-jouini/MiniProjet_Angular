@@ -11,28 +11,48 @@ import { UpdateGenre } from '../update-genre/update-genre';
   styles: ``
 })
 export class ListeGenres implements OnInit {
-  Genres!: Genre[];
+  Genres: Genre[] = [];
   ajout: boolean = true;
-  constructor(private chansonService: ChansonService) { }
-  ngOnInit(): void {
-    this.Genres = this.chansonService.listeGenres();
-    console.log(this.Genres);
-  }
-  updatedGenre: Genre = { "idGen": 0, "nomGen": "" };
-  GenreUpdated(g: Genre) {
-    //console.log("Genre mis à jour :", g);
+  newGenre: Genre = { idGen: 0, nomGen: '' };
+  updatedGenre: Genre = { idGen: 0, nomGen: '' };
 
-    this.chansonService.ajouterGenre(g);
-    this.Genres = this.chansonService.listeGenres();
+  constructor(private chansonService: ChansonService) { }
+
+  ngOnInit(): void {
+    this.chargerGenres();
   }
-  chargerGenres() {
-    const result = this.chansonService.listeGenres();
-    this.Genres = result;
-    console.log(result);
+
+  // Fonction pour ajouter un nouveau genre
+  ajouterGenre() {
+    if (!this.newGenre.nomGen || this.newGenre.nomGen.trim() === '') {
+      alert("Veuillez entrer un nom de genre valide !");
+      return;
+    }
+
+    this.chansonService.ajouterGenre(this.newGenre).subscribe({
+      next: (res) => {
+        console.log("Genre ajouté:", res);
+        this.newGenre = { idGen: 0, nomGen: '' }; // reset form
+        this.chargerGenres();
+      },
+      error: (err) => {
+        console.error("Erreur lors de l'ajout du genre:", err);
+        alert("Impossible d'ajouter ce genre.");
+      }
+    });
   }
+
+  // Fonction pour mettre à jour un genre existant
   updateGenre(Gen: Genre) {
-    this.updatedGenre = Gen;
+    this.updatedGenre = { ...Gen };
     this.ajout = false;
   }
 
+  // Fonction pour recharger la liste des genres
+  chargerGenres() {
+    this.chansonService.listeGenres().subscribe(res => {
+      this.Genres = res._embedded.genres;
+      console.log("Genres chargés :", this.Genres);
+    });
+  }
 }

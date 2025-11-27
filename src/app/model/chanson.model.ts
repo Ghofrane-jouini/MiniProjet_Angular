@@ -1,10 +1,12 @@
 import { Genre } from "./Genre.model";
-export interface Chanson {
+
+export class Chanson {
   idChanson?: number;
   titre?: string;
   artiste?: string;
   duree?: number;
-  dateSortie?: Date;
-  Genre : Genre;
-  email?:string;
+  dateSortie?: string;
+  genre!: Genre;   
+  email?: string;
+
 }

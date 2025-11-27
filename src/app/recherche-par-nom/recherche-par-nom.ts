@@ -9,39 +9,46 @@ import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-recherche-par-nom',
-  imports: [DatePipe, FormsModule,SearchFilterPipe,CommonModule,RouterLink],
+  standalone: true,
+  imports: [DatePipe, FormsModule, SearchFilterPipe, CommonModule, RouterLink],
   templateUrl: './recherche-par-nom.html',
-  standalone: true
 })
-export class RechercheParNom implements OnInit{
+export class RechercheParNom implements OnInit {
+
   nomGen!: string;
   titre!: string;
-  chansons!: Chanson[] ;
-  allchansons!: Chanson[];
-  searchTerm: string='';
+  chansons: Chanson[] = [];
+  allchansons: Chanson[] = [];
+  searchTerm: string = '';
 
-  constructor(private chansonService: ChansonService ,public auth: AuthService) { }
+  constructor(private chansonService: ChansonService, public auth: AuthService) { }
+
   ngOnInit(): void {
-    this.chansons = this.chansonService.listeChansons();
-    this.allchansons = this.chansonService.listeChansons();
+    this.chansonService.listeChansons().subscribe(chans => {
+      this.chansons = chans;
+      this.allchansons = chans;
+    });
   }
+
   rechercherChanson() {
-  this.chansonService.rechercherParNom(this.titre)
-    .subscribe(chansons => {
+    this.chansonService.rechercherParNom(this.titre).subscribe(chansons => {
       console.log(chansons);
       this.chansons = chansons;
     });
-}
-  
-  onKeyUp(filterText: string) {
-    this.chansons = this.allchansons.filter(item =>
-      item.titre?.toLowerCase().includes(filterText));
   }
-  supprimerChanson(chanson: Chanson) {
-  if (confirm("Voulez-vous vraiment supprimer cette chanson ?")) {
-    this.chansonService.supprimerChanson(chanson);
-    this.chansons = this.chansons.filter(c => c.idChanson !== chanson.idChanson);
-  }
-}
 
+  onKeyUp(filterText: string) {
+    const text = filterText.toLowerCase();
+    this.chansons = this.allchansons.filter(item =>
+      item.titre?.toLowerCase().includes(text)
+    );
+  }
+
+  supprimerChanson(chanson: Chanson) {
+    if (confirm("Voulez-vous vraiment supprimer cette chanson ?")) {
+      this.chansonService.supprimerChanson(chanson.idChanson!).subscribe(() => {
+        this.chansons = this.chansons.filter(c => c.idChanson !== chanson.idChanson);
+      });
+    }
+  }
 }

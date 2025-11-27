@@ -1,73 +1,42 @@
 <div class="container">
   <h2>Modifier une chanson :</h2>
-  <form [formGroup]="myForm" (ngSubmit)="updateChanson()">
+  <form (ngSubmit)="updateChanson()">
     <div class="col-sm-2 col-md-2 col-lg-2">
       <label>ID</label>
-      <input readonly type="text" formControlName="idChanson" name="idChanson" class="form-control">
+      <input readonly type="text" [(ngModel)]="currentChanson.idChanson" name="idChanson" class="form-control">
     </div>
 
     <div class="col-sm-4 col-md-4 col-lg-4">
       <label>Titre</label>
-      <input type="text" formControlName="titre" name="titre" class="form-control">
-      <span *ngIf="myForm.get('titre')?.hasError('required') && myForm.get('titre')?.touched" class="text-danger">
-        Le titre est obligatoire !
-      </span>
-      <span *ngIf="myForm.get('titre')?.hasError('minlength') && myForm.get('titre')?.touched" class="text-danger">
-        Le titre doit contenir au moins 3 caractères !
-      </span>
+      <input type="text" [(ngModel)]="currentChanson.titre" name="titre" class="form-control" required minlength="3">
     </div>
 
     <div class="col-sm-4 col-md-4 col-lg-4">
       <label>Artiste</label>
-      <input type="text" formControlName="artiste" name="artiste" class="form-control">
-      <span *ngIf="myForm.get('artiste')?.hasError('required') && myForm.get('artiste')?.touched" class="text-danger">
-        Le nom artiste est obligatoire !
-      </span>
+      <input type="text" [(ngModel)]="currentChanson.artiste" name="artiste" class="form-control" required>
     </div>
 
     <div class="col-sm-4 col-md-4 col-lg-4">
       <label>Durée (min)</label>
-      <input type="number" formControlName="duree" name="duree" class="form-control">
-      <span *ngIf="myForm.get('duree')?.hasError('required') && myForm.get('duree')?.touched" class="text-danger">
-        La duree est obligatoire !
-      </span>
-      <span *ngIf="myForm.get('duree')?.hasError('min') && myForm.get('duree')?.touched" class="text-danger">
-        La duree doit être positif !
-      </span>
+      <input type="number" [(ngModel)]="currentChanson.duree" name="duree" class="form-control" required min="1">
     </div>
 
     <div class="col-sm-4 col-md-4 col-lg-4">
       <label>Date sortie</label>
-      <input type="date" formControlName="dateSortie" name="dateSortie" class="form-control">
-      <span *ngIf="myForm.get('dateSortie')?.hasError('required') && myForm.get('dateSortie')?.touched"
-        class="text-danger">
-        La date est obligatoire !
-      </span>
+      <input type="date" [(ngModel)]="currentChanson.dateSortie" name="dateSortie" class="form-control" required>
     </div>
-    <div class="col-sm-4 col-md-4 col-lg-4">
-      <label>Email</label>
-      <input type="email" formControlName="email" class="form-control" />
-      <span *ngIf="myForm.get('email')?.hasError('required') && myForm.get('email')?.touched" class="text-danger">
-        L'email est obligatoire !
-      </span>
-      <span *ngIf="myForm.get('email')?.hasError('email') && myForm.get('email')?.touched" class="text-danger">
-        L'email n'est pas valide !
-      </span>
-    </div>
+
+
     <div class="col-sm-4 col-md-4 col-lg-4">
       <label>Genre</label>
-      <select formControlName="idGen" class="form-control form-control-lg">
+      <select [(ngModel)]="updatedGenId" name="idGen" class="form-control" required>
         <option value="">-- Sélectionner un genre --</option>
-        <option *ngFor="let Gen of Genres" [value]="Gen.idGen">{{ Gen.nomGen }}</option>
+        <option *ngFor="let gen of Genres" [value]="gen.idGen">{{ gen.nomGen }}</option>
       </select>
-
-      <span *ngIf="myForm.get('idGen')?.hasError('required') && myForm.get('idGen')?.touched" class="text-danger">
-        Le Genre est obligatoire !
-      </span>
     </div>
-     
+
     <div class="mt-2">
-      <button type="submit" [disabled]="myForm.invalid" class="btn btn-success">Modifier</button>
+      <button type="submit" class="btn btn-success">Modifier</button>
     </div>
   </form>
 </div>

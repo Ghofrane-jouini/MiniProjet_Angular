@@ -35,10 +35,10 @@
                         <td>{{ chanson.artiste }}</td>
                         <td>{{ chanson.duree }} min</td>
                         <td>{{ chanson.dateSortie | date:'dd/MM/yyyy' }}</td>
-                        <td>{{chanson.Genre.nomGen}}</td>
+                        <td>{{chanson.genre.nomGen}}</td>
                         <td>
-                            @if(chanson.Genre){
-                        <td>{{chanson.Genre.nomGen}}</td> }
+                            @if(chanson.genre){
+                        <td>{{chanson.genre.nomGen}}</td> }
                         @else {
                         <td>PAS DE GENRE</td>
                         }

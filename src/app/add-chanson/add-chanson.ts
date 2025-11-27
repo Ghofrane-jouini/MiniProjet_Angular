@@ -15,46 +15,36 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 })
 export class AddChanson implements OnInit {
 
-  newChanson: Chanson = {
-    idChanson: 0,
-    titre: '',
-    artiste: '',
-    duree: 0,
-    dateSortie: new Date(),
-    Genre: { idGen: 0, nomGen: '' }
-  };
-
+  newChanson = new Chanson();
+  message!: string;
   Genres!: Genre[];
+  newIdGen!: number;
+  newGenre!: Genre;
   myForm!: FormGroup;
 
   constructor(
     private chansonService: ChansonService,
     private router: Router,
-    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
-    this.Genres = this.chansonService.listeGenres();
+    this.chansonService.listeGenres().
+      subscribe(gens => {
+        console.log(gens);
+        this.Genres = gens._embedded.genres;
+      }
+      );
 
-    this.myForm = this.formBuilder.group({
-      idChanson: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
-      titre: ['', [Validators.required, Validators.minLength(3)]],
-      artiste: ['', [Validators.required]],
-      duree: [0, [Validators.required, Validators.min(0)]],
-      dateSortie: ['', Validators.required],
-      idGen: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]]
-    });
   }
 
-  addChanson() {
+  /*addChanson() {
     const formValues = this.myForm.value;
 
     const existingIds = this.chansonService.listeChansons().map(ch => ch.Genre.idGen);
 
     //if (existingIds.includes(Number(formValues.idGen))) {
-      //alert("Cet ID existe déjà ! Veuillez en choisir un autre.");
-     // return;}
+    //alert("Cet ID existe déjà ! Veuillez en choisir un autre.");
+    // return;}
 
     const chansonToAdd: Chanson = {
       idChanson: Number(formValues.idChanson),
@@ -67,5 +57,36 @@ export class AddChanson implements OnInit {
 
     this.chansonService.ajouterChanson(chansonToAdd);
     this.router.navigate(['/chansons']);
+  }*/
+  addChanson() {
+  if (!this.newIdGen) {
+    alert('Veuillez sélectionner un genre valide!');
+    return;
   }
+
+  this.chansonService.consulterGenre(this.newIdGen).subscribe({
+    next: (genre) => {
+      this.newChanson.genre = genre;
+
+      this.newChanson.idChanson = undefined;
+
+      this.chansonService.ajouterChanson(this.newChanson).subscribe({
+        next: (chan) => {
+          console.log('Chanson ajoutée:', chan);
+          this.router.navigate(['/chansons']);
+        },
+        error: (err) => {
+          console.error('Erreur lors de l\'ajout:', err);
+          alert('Erreur lors de l\'ajout de la chanson.');
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Erreur lors de la récupération du genre:', err);
+      alert('Impossible de récupérer le genre sélectionné.');
+    }
+  });
+}
+
+
 }
